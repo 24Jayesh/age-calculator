@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGE CALCULATOR</title>
+    <link rel="stylesheet" href="./agecalculator.css">
+</head>
+<body>
+    <div class="container">
+     <div class="header">AGE CALCULATOR</div>
+     <div class="input">
+         <input type="date" id="date-input">
+         <button class="btn" onclick="agecalculator()">CALCULATE</button>
+        
+     </div>
+     <div class="output">
+       <div>
+           <span id = "year">
+               - 
+           </span>
+             <p>
+               Years
+             </p>
+        </div>
+        <div>
+            <span id = "month">
+               - 
+             </span>
+               <p>
+                  Months
+               </p>
+        </div>
+        <div>
+            <span id = "day">
+                -
+            </span>
+               <p>
+                 Days
+               </p>
+        </div>
+    </div>
+    </div>
+
+    <script>
+     const months=[31,28,31,30,31,30,31,31,30,31,30,31];
+     
+     function agecalculator(){
+         let today=new Date();
+         let inputdate =new Date(document.getElementById("date-input").value);
+         let birthmonth,birthdate,birthyear;
+
+         let birthdetails = {
+             date : inputdate.getDate(),
+             month :inputdate.getMonth() + 1,
+             year :inputdate.getFullYear(),
+         };
+         let currentyear = today.getFullYear();
+         let currentmonth = today.getMonth() + 1;
+        let  currentdate = today.getDate();
+
+        leapchecker(currentyear);
+
+        if( (birthdetails.year > currentyear) || ( birthdetails.month >currentmonth && birthdetails.year == currentyear) || (birthdetails.date > currentdate && birthdetails.month ==currentmonth && birthdetails.year == currentyear)
+        ){
+            alert("NOT BORN YET");
+            displayresult("-","-","-");
+            return;
+        }
+     
+
+        birthyear =currentyear - birthdetails.year;
+
+        if(currentmonth >= birthdetails.month){
+            birthmonth=currentmonth - birthdetails.month;
+        }
+        else{
+            birthyear--;
+            birthmonth =12 + currentmonth -birthdetails.month;
+        }
+
+        if(currentdate >= birthdetails.date){
+            birthdate = currentdate -birthdetails.date;
+        }
+        else{
+            birthmonth--;
+            let days =months[currentmonth -2];
+            birthdate = days + currentdate - birthdetails.date;
+
+             if (birthmonth<0){
+                 birthmonth=11;
+                 birthyear--;
+             }
+        }
+        // console.log(birthyear,birthmonth,birthdate);
+        displayresult(birthyear,birthmonth,birthdate);
+    }
+     
+       function displayresult(byear,bmonth,bdate){
+           document.getElementById("year").textContent =byear;
+           document.getElementById("month").textContent =bmonth;
+           document.getElementById("day").textContent =bdate;
+       }
+
+    function leapchecker(year){
+        if (year %4 ==0 || year % 100 == 0 && year % 400 ==0){
+            months[1]=29;
+        }
+        else{
+            months[1]=28;
+        }
+      
+    }
+    </script>
+</body>
+</html>
